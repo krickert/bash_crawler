@@ -1,5 +1,5 @@
 WEBSITE_URL=http://krickert.photography
 PAD_TO_WIDTH=4
-MAPPING_FILE=krickert_site
+LOG_FILE=krickert_site_crawl.log
 SITEMAP_FILE=examples/krickertmap.txt
 
