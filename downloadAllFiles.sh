@@ -58,7 +58,7 @@ for page in `cat ${SITEMAP_FILE}`;
 do 
 	FULL_SITE=${WEBSITE_URL}${page}; 
 	echo "Page ${FULL_SITE} Counter ${COUNTER}" >> ${OUTPUT_DIRECTORY}/${LOG_FILE}; 
-	wget --quiet $FULL_SITE -O ${OUTPUT_DIRECTORY}/${FILE_PREFIX}${COUNTER_DISPLAY}.html; 
+	curl -s "${FULL_SITE}" -o ${OUTPUT_DIRECTORY}/${FILE_PREFIX}${COUNTER_DISPLAY}.html; 
 	STATUS=$?
 	if [ ! ${STATUS} -eq 0 ]
 	then
