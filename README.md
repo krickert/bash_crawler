@@ -10,8 +10,8 @@ This ends today.
 You can set all the variables in the `variables.sh` file.
 
 The following variables are available:
-| Variable name		| Required?	| Default value		| Description								|Example					|
-|-----------------------|---------------|-----------------------|-----------------------------------------------------------------------|-----------------------------------------------|
+| Variable name		| Required?	| Default value		| Description								| Example					|
+| --------------------- | ------------- | --------------------- | --------------------------------------------------------------------- | --------------------------------------------- |
 | WEBSITE_URL		| true		| None			| The full URL of the website to crawl.  Needs http vs. https prefix	| WEBSITE_URL=http://cnn.com			|
 | SITEMAP_FILE		| false		| sitemap.txt		| The name of the sitemap file.  It's a list of relative URLs to crawl	| SITEMAP_FILE=examples/cnnsitemap		|
 | PAD_TO_WIDTH		| false		| 4			| The number of spaces to pad a 0 with on the output html file		| PAD_TO_WIDTH=3				|
