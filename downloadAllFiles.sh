@@ -30,7 +30,7 @@ fi
 echo "PATH_TO_WIDTH set to ${PAD_TO_WIDTH}"
 
 if [ -z "${LOG_FILE}" ]; then
-	LOG_FILE=mappings
+	LOG_FILE=crawler.log
 fi
 echo "LOG_FILE set to ${LOG_FILE}"
 LOG_FILE_FULL=${LOG_FILE}${DATE_TIME}.txt
@@ -54,21 +54,31 @@ if [ ! -d ${OUTPUT_DIRECTORY} ]; then
 	fi
 fi
 
+FULL_FAILURE_FILE=${OUTPUT_DIRECTORY}/failures.txt
+FULL_LOG_FILE=${OUTPUT_DIRECTORY}/${LOG_FILE}
+
 for page in `cat ${SITEMAP_FILE}`; 
 do 
 	FULL_SITE=${WEBSITE_URL}${page}; 
-	echo "Page ${FULL_SITE} Counter ${COUNTER}" >> ${OUTPUT_DIRECTORY}/${LOG_FILE}; 
-	curl -s "${FULL_SITE}" -o ${OUTPUT_DIRECTORY}/${FILE_PREFIX}${COUNTER_DISPLAY}.html; 
+	echo "Page ${FULL_SITE} Counter ${COUNTER}" >> ${FULL_LOG_FILE}
+	FILE_TO_SAVE=${OUTPUT_DIRECTORY}/${FILE_PREFIX}${COUNTER_DISPLAY}.html
+	curl -s --fail "${FULL_SITE}" -o ${FILE_TO_SAVE}; 
 	STATUS=$?
 	if [ ! ${STATUS} -eq 0 ]
 	then
-		echo "${FULL_SITE} with counter mapping of ${COUNTER_DISPLAY} returned exit code ${STATUS}" >> ${OUTPUT_DIRECTORY}/failures.txt
-		rm ${OUTPUT_DIRECTORY}/${FILE_PREFIX}${COUNTER_DISPLAY}.html
+		ERROR_MESSAGE="${FULL_SITE} with counter mapping of ${COUNTER_DISPLAY} returned exit code ${STATUS}";
+		echo $ERROR_MESSAGE >> ${FULL_LOG_FILE}
+		echo $ERROR_MESSAGE >> ${FULL_FAILURE_FILE}
+		if [ -e ${FILE_TO_SAVE} ]; then rm ${FILE_TO_SAVE}; fi
 	fi
 	COUNTER=$((COUNTER + 1));
 	COUNTER_DISPLAY=$(printf "%0*d\n" ${PAD_TO_WIDTH} ${COUNTER});
 done;
 
+if [ -e  ${OUTPUT_DIRECTORY}/failures.txt ]; then
+	NUMBER_OF_ERRORS=$(wc -l < "${FULL_FAILURE_FILE}")
+	echo "There were ${NUMBER_OF_ERRORS} errors in the file. Please see the cURL documentation and the failure text to see why it failed. see https://curl.haxx.se/libcurl/c/libcurl-errors.html for more details" >> ${FULL_LOG_FILE}
+fi
 echo "Zipping the directory.."
 zip -r ${OUTPUT_DIRECTORY}.zip ${OUTPUT_DIRECTORY}
 echo ${COUNTER} files were created and zipped into ${OUTPUT_DIRECTORY}.zip
