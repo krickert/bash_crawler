@@ -29,11 +29,11 @@ if [ -z "${PAD_TO_WIDTH}" ]; then
 fi
 echo "PATH_TO_WIDTH set to ${PAD_TO_WIDTH}"
 
-if [ -z "${MAPPING_FILE}" ]; then
-	MAPPING_FILE=mappings
+if [ -z "${LOG_FILE}" ]; then
+	LOG_FILE=mappings
 fi
-echo "MAPPING_FILE set to ${MAPPING_FILE}"
-MAPPING_FILE_FULL=${MAPPING_FILE}${DATE_TIME}.txt
+echo "LOG_FILE set to ${LOG_FILE}"
+LOG_FILE_FULL=${LOG_FILE}${DATE_TIME}.txt
 
 if [ -z "$OUTPUT_DIRECTORY" ]; then
 	OUTPUT_DIRECTORY=crawled_pages${DATE_TIME}
@@ -57,8 +57,8 @@ fi
 for page in `cat ${SITEMAP_FILE}`; 
 do 
 	FULL_SITE=${WEBSITE_URL}${page}; 
-	echo "Page ${FULL_SITE} Counter ${COUNTER}" >> ${OUTPUT_DIRECTORY}/${MAPPING_FILE}; 
-	wget $FULL_SITE -O ${OUTPUT_DIRECTORY}/${FILE_PREFIX}${COUNTER_DISPLAY}.html; 
+	echo "Page ${FULL_SITE} Counter ${COUNTER}" >> ${OUTPUT_DIRECTORY}/${LOG_FILE}; 
+	wget --quiet $FULL_SITE -O ${OUTPUT_DIRECTORY}/${FILE_PREFIX}${COUNTER_DISPLAY}.html; 
 	STATUS=$?
 	if [ ! ${STATUS} -eq 0 ]
 	then
