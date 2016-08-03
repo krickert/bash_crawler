@@ -1,6 +1,8 @@
 # bash_crawler
 Simple bash script that crawls a text file of websites.
 
+This script will set a base URL and crawl all the relative URLs from a single file.  At the end of the crawl, it will zip up the file so you can share the crawl with your eFriends.
+
 ## WTF
 I always end up in a situation when crawling sites to get a corpus of HTML pages together and rewrite it.
 
